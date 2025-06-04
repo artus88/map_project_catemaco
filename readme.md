@@ -13,7 +13,7 @@ $pip install -r requirements.txt
 
 create the db in you pc
 
-$ crear_db_catemaco.py
+$ py crear_db_catemaco.py
 
 Then you will be able tu execute the app. 
 
