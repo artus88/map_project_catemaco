@@ -6,6 +6,7 @@ Create and execute an Env.
 
 $ py -m venv venv
 
+
 $ venv\Scripts\activate
 
 execute to install the dependecies > 
