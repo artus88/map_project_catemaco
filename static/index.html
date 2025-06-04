@@ -1,0 +1,90 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Mapa Catemaco</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+  <style>
+    body { margin: 0; display: flex; }
+    #map { height: 100vh; width: 70vw; }
+    #info { width: 30vw; padding: 1em; background: #f8f8f8; font-family: sans-serif; }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <div id="info">
+    <h2>Información</h2>
+    <div id="details">Pasa el cursor sobre un polígono.</div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    // Crear el mapa centrado en Catemaco
+    const map = L.map('map').setView([18.419, -95.122], 14);
+
+    // Cargar tiles de OpenStreetMap
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19
+    }).addTo(map);
+
+    // Lista de polígonos con su número de sección
+    const secciones = [
+
+      {
+        id: "0635",
+        coords: [[-95.10660441977754,18.41682820506726],[-95.10153742835452,18.412714065291283],[-95.09642171586025,18.419786626803372],[-95.10543511406495,18.42061867375135],[-95.10660441977754,18.41682820506726]]
+      },
+      {
+        id: "0643",
+        coords: [[-95.1065341026185,18.416265729252927],[-95.10615084535351,18.41888645629784],[-95.11194341793748,18.419505178174376],[-95.11282588261466,18.416884472211322],[-95.1065341026185,18.416265729252927]]
+      },
+      {
+        id: "0636",
+        coords: [[-95.10577458748418,18.420107044333932],[-95.11148471937396,18.42083331182137],[-95.11191918593099,18.419577063421514],[-95.10610560962299,18.418988193825825],[-95.10577458748418,18.420107044333932]]
+      },
+      {
+        id: "0633",
+        coords: [[-95.10576346734827,18.420174115072413],[-95.10390044039465,18.42964127366176],[-95.10783066163921,18.43007708938616],[-95.11135254820914,18.42097315370613],[-95.10576346734827,18.420174115072413]]
+      }
+      ,
+      {
+        id: "0642",
+        coords: [[-95.11290932415653,18.416929495823325],[-95.1117864038011,18.420779447711084],[-95.11586975054875,18.423055479373303],[-95.11497651844746,18.416396791293295],[-95.11290932415653,18.416929495823325]]
+      },
+      {
+        id: "0637",
+        coords: [,
+      {
+        id: "0642",
+        coords: [[-95.11367495167157,18.422086958942785],[-95.11155671554646,18.42097315370613],[-95.10961712584128,18.42603364552815],[-95.11148015292085,18.426324195294214],[-95.11137806925244,18.42690529389084],[-95.1128072406141,18.42712320535793],[-95.11367495167157,18.422086958942785]]
+      }]
+      }
+    ];
+
+    // Dibujar polígonos y agregar eventos
+    secciones.forEach(seccion => {
+      const poligono = L.polygon(seccion.coords.map(([lon, lat]) => [lat, lon]), { color: 'blue' }).addTo(map);
+
+      // Cuando el mouse pasa sobre el polígono
+      poligono.on('mouseover', () => {
+        fetch(`/info/${seccion.id}`)
+          .then(res => res.json())
+          .then(data => {
+            const contenido = data.error ? data.error : `
+              <strong>Sección:</strong> ${seccion.id}<br>
+              <strong>MC:</strong> ${data.MC}<br>
+              <strong>MORENA:</strong> ${data.MORENA}<br>
+              <strong>PT:</strong> ${data.PT}<br>
+              <strong>PAN :</strong> ${data.PAN}<br>
+              <strong>PRI:</strong> ${data.PRI}<br>
+              <strong>TOTAL_VOTOS :</strong> ${data.TOTAL_VOTOS}<br>
+              <strong>NOMINAL:</strong> ${data.NOMINAL}
+            `;
+            document.getElementById("details").innerHTML = contenido;
+          });
+      });
+    });
+  </script>
+</body>
+</html>
