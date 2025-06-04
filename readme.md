@@ -11,6 +11,10 @@ execute to install the dependecies >
 
 $pip install -r requirements.txt
 
+create the db in you pc
+
+$ crear_db_catemaco.py
+
 Then you will be able tu execute the app. 
 
 $ py app.py

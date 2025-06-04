@@ -2,7 +2,7 @@ import pandas as pd
 import sqlite3
 
 # Cargar el CSV
-df = pd.read_csv("Catemaco.csv")
+df = pd.read_csv("Result_Catemaco_2025.csv")
 
 # Limpiar campos clave (por ejemplo, quitar comillas y espacios de SECCION)
 df["SECCION"] = df["SECCION"].astype(str).str.replace("'", "").str.strip()
