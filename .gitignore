@@ -1,2 +1,3 @@
 venv/
 *.db
+raw_data/
