@@ -6,7 +6,7 @@ import sqlite3
 app = Flask(__name__, static_folder="static")
 CORS(app)
 
-DB_PATH = "catemaco.db"
+DB_PATH = "catemaco_2025.db"
 
 def get_info_from_db(section_id):
     try:
@@ -38,11 +38,11 @@ SECTIONS = {
     "0647": {"columna2": "Centro", "columna3": "Zona urbana", "columna4": "Cerca del lago"}
 }
 
-@app.route("/")
+@app.route("/map")
 def index():
-    return send_from_directory("static", "index.html")
+    return send_from_directory("static", "map.html")
 
-@app.route("/info/<section_id>")
+@app.route("/map/<section_id>")
 def get_section_info(section_id):
     #data = SECTIONS.get(section_id, {"error": "No se encontró la sección"})
     #return jsonify(data)

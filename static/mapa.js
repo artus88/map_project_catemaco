@@ -14,7 +14,7 @@
 
    // Cuando el mouse pasa sobre el polígono
    poligono.on('mouseover', () => {
-     fetch(`/info/${seccion.id}`)
+     fetch(`/map/${seccion.id}`)
        .then(res => res.json())
        .then(data => {
          const contenido = data.error ? data.error : `
@@ -33,3 +33,4 @@
        });
    });
  });
+
