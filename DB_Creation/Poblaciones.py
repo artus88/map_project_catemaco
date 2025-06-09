@@ -12,12 +12,12 @@ conn = sqlite3.connect("catemaco_2025.db")
 cursor = conn.cursor()
 
 # Eliminar la tabla si ya existe
-cursor.execute("DROP TABLE IF EXISTS casillas")
+cursor.execute("DROP TABLE IF EXISTS Poblaciones")
 
 # Crear tabla con campos específicos
 cursor.execute("""
 CREATE TABLE Poblaciones (
-    SECCIO INTEGER,
+    SECCION INTEGER,
 	POBLACION TEXT, 
     Municipio TEXT,	
     ID_MUNICIPIO INTEGER
@@ -26,7 +26,7 @@ CREATE TABLE Poblaciones (
 """)
 
 # Insertar los datos
-df.to_sql("casillas", conn, if_exists="append", index=False)
+df.to_sql("Poblaciones", conn, if_exists="append", index=False)
 
 # Cerrar conexión
 conn.commit()

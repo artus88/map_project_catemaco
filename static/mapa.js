@@ -18,11 +18,13 @@
   .then(res => res.json())
   .then(data => {
     if (data.error) {
-      document.getElementById("details").innerHTML = data.error;
+      document.getElementById("details_2025").innerHTML = data.error;
       return;
     }
-
+    console.log(data)
     let contenido = `<strong>Sección:</strong> ${seccion.id}<br><br>`;
+    contenido +=  `<strong>POBLACIONES: </strong> ${data.POBLACION}<br><br>`;
+    contenido +=  `<strong>NOMINAL : </strong> ${data.NOMINAL}<br><br>`;
 
     for (const [key, value] of Object.entries(data)) {
       if (value === null || value === undefined || key === "error") continue;
@@ -30,7 +32,7 @@
       let extra = "";
 
       // Si es un partido, muestra porcentaje sobre TOTAL_VOTOS
-      if (typeof value === "number" && data.TOTAL_VOTOS && key !== "TOTAL_VOTOS" && key !== "NOMINAL") {
+      if (typeof value === "number" && data.TOTAL_VOTOS && key !== "TOTAL_VOTOS" && key !== "NOMINAL" ) {
         extra = ` - ${(value / data.TOTAL_VOTOS * 100).toFixed(1)} %`;
       }
 
@@ -39,10 +41,13 @@
         extra = ` - ${(value / data.NOMINAL * 100).toFixed(1)} %`;
       }
 
+      if( key !== "SECCION" && key !== "POBLACION" && key !== "NOMINAL")
       contenido += `<strong>${key}:</strong> ${value}${extra}<br>`;
     }
 
-    document.getElementById("details").innerHTML = contenido;
+
+
+    document.getElementById("details_2025").innerHTML = contenido;
   });
 
    });

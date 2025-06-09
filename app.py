@@ -19,11 +19,10 @@ def get_info_from_db(section_id):
         cursor.execute(Map_query, (section_id,))
         row = cursor.fetchone()
         conn.close()
-
+            
         if row:
             # Convertir a diccionario
             resultado = {key: row[key] for key in row.keys()}
-            print('get_info_from_db')
             print (resultado)
             return resultado
         
@@ -48,7 +47,7 @@ def get_section_info(section_id):
     #data = SECTIONS.get(section_id, {"error": "No se encontró la sección"})
     #return jsonify(data)
     data = jsonify(get_info_from_db(section_id))
-    print (data)
+    #print (data)
     return data
 
 if __name__ == "__main__":
