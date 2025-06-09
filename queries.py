@@ -1,0 +1,16 @@
+Map_query = '''
+
+SELECT 
+    SECCION, 
+    SUM(MC) AS MC,
+    SUM(PVEM+MOR+C_PVEM_MOR) AS MORENA,  
+    SUM(PAN) as PAN, 
+    SUM(PRI) AS PRI, 
+    SUM(PT) AS PT, 
+    SUM(TOTAL_VOTOS_ASENTADO) AS TOTAL_VOTOS, 
+    SUM(LISTA_NOMINAL) AS NOMINAL   
+FROM 
+    casillas 
+    WHERE 
+    SECCION = ? LIMIT 1
+'''

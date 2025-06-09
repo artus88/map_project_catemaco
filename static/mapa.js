@@ -14,23 +14,37 @@
 
    // Cuando el mouse pasa sobre el polígono
    poligono.on('mouseover', () => {
-     fetch(`/map/${seccion.id}`)
-       .then(res => res.json())
-       .then(data => {
-         const contenido = data.error ? data.error : `
-           <strong>Sección:</strong> ${seccion.id}<br>
-           <strong> </strong><br>
-           <strong> </strong><br>
-           <strong>MC:</strong> ${data.MC}   -   ${ ( (data.MC / data.TOTAL_VOTOS) *100).toFixed(1) } % <br> 
-           <strong>MORENA:</strong> ${data.MORENA} -   ${ ( (data.MORENA / data.TOTAL_VOTOS) *100).toFixed(1) } %<br>
-           <strong>PT:</strong> ${data.PT}  -   ${ ( (data.PT / data.TOTAL_VOTOS) *100).toFixed(1) } %<br>
-           <strong>PAN :</strong> ${data.PAN}   -   ${ (( data.PAN / data.TOTAL_VOTOS) *100).toFixed(1) } %<br>
-           <strong>PRI:</strong> ${data.PRI}   -   ${ (( data.PRI / data.TOTAL_VOTOS) *100).toFixed(1) } %<br>
-           <strong>TOTAL_VOTOS :</strong> ${data.TOTAL_VOTOS}   -   ${ (( data.TOTAL_VOTOS / data.NOMINAL) *100).toFixed(1) } %<br>
-           <strong>NOMINAL:</strong> ${data.NOMINAL}
-         `;
-         document.getElementById("details").innerHTML = contenido;
-       });
+    fetch(`/map/${seccion.id}`)
+  .then(res => res.json())
+  .then(data => {
+    if (data.error) {
+      document.getElementById("details").innerHTML = data.error;
+      return;
+    }
+
+    let contenido = `<strong>Sección:</strong> ${seccion.id}<br><br>`;
+
+    for (const [key, value] of Object.entries(data)) {
+      if (value === null || value === undefined || key === "error") continue;
+
+      let extra = "";
+
+      // Si es un partido, muestra porcentaje sobre TOTAL_VOTOS
+      if (typeof value === "number" && data.TOTAL_VOTOS && key !== "TOTAL_VOTOS" && key !== "NOMINAL") {
+        extra = ` - ${(value / data.TOTAL_VOTOS * 100).toFixed(1)} %`;
+      }
+
+      // Si es TOTAL_VOTOS, muestra % sobre NOMINAL
+      if (key === "TOTAL_VOTOS" && data.NOMINAL) {
+        extra = ` - ${(value / data.NOMINAL * 100).toFixed(1)} %`;
+      }
+
+      contenido += `<strong>${key}:</strong> ${value}${extra}<br>`;
+    }
+
+    document.getElementById("details").innerHTML = contenido;
+  });
+
    });
  });
 

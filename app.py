@@ -2,6 +2,7 @@
 from flask import Flask, jsonify, send_from_directory
 from flask_cors import CORS
 import sqlite3
+from queries import Map_query
 
 app = Flask(__name__, static_folder="static")
 CORS(app)
@@ -15,7 +16,7 @@ def get_info_from_db(section_id):
         cursor = conn.cursor()
 
         # Consultar por sección
-        cursor.execute("SELECT SECCION, SUM(MC) AS MC, SUM(PAN) as PAN, SUM(PRI) AS PRI, SUM(PVEM+MOR+C_PVEM_MOR) AS MORENA, SUM(PT) AS PT, SUM(TOTAL_VOTOS_ASENTADO) AS TOTAL_VOTOS, SUM(LISTA_NOMINAL) AS NOMINAL   FROM casillas WHERE SECCION = ? LIMIT 1", (section_id,))
+        cursor.execute(Map_query, (section_id,))
         row = cursor.fetchone()
         conn.close()
 
