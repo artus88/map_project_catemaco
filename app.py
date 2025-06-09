@@ -2,14 +2,19 @@
 from flask import Flask, jsonify, send_from_directory
 from flask_cors import CORS
 import sqlite3
-from queries import Map_query
+from queries import Map_query_casillas_2025, Map_query_casillas_2021
 
 app = Flask(__name__, static_folder="static")
 CORS(app)
 
 DB_PATH = "catemaco_2025.db"
 
-def get_info_from_db(section_id):
+def get_info_from_db(section_id, year):
+    if year == '2025':
+        Map_query = Map_query_casillas_2025
+    elif year =='2021': 
+        
+        Map_query = Map_query_casillas_2021
     try:
         conn = sqlite3.connect(DB_PATH)
         conn.row_factory = sqlite3.Row
@@ -42,13 +47,15 @@ SECTIONS = {
 def index():
     return send_from_directory("static", "map.html")
 
-@app.route("/map/<section_id>")
+@app.route("/2025/<section_id>")
 def get_section_info(section_id):
     #data = SECTIONS.get(section_id, {"error": "No se encontró la sección"})
     #return jsonify(data)
-    data = jsonify(get_info_from_db(section_id))
+    votos_2025 = get_info_from_db(section_id,'2025')
+    votos_2021 = get_info_from_db(section_id,'2021')
+    data_2025 = jsonify({"2025" :votos_2025, "2021" :votos_2021})
     #print (data)
-    return data
+    return data_2025
 
 if __name__ == "__main__":
     app.run(debug=True)

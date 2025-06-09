@@ -14,40 +14,70 @@
 
    // Cuando el mouse pasa sobre el polígono
    poligono.on('mouseover', () => {
-    fetch(`/map/${seccion.id}`)
+    fetch(`/2025/${seccion.id}`)
   .then(res => res.json())
   .then(data => {
     if (data.error) {
       document.getElementById("details_2025").innerHTML = data.error;
+      document.getElementById("details_2021").innerHTML = data.error;
       return;
     }
     console.log(data)
-    let contenido = `<strong>Sección:</strong> ${seccion.id}<br><br>`;
-    contenido +=  `<strong>POBLACIONES: </strong> ${data.POBLACION}<br><br>`;
-    contenido +=  `<strong>NOMINAL : </strong> ${data.NOMINAL}<br><br>`;
 
-    for (const [key, value] of Object.entries(data)) {
-      if (value === null || value === undefined || key === "error") continue;
+    // 2025 
+    let contenido_2025 = `<strong>Sección:</strong> ${seccion.id}<br><br>`;
+    contenido_2025 +=  `<strong>POBLACIONES: </strong> ${data[2025].POBLACION}<br><br>`;
+    contenido_2025 +=  `<strong>VOTOS NOMINALES : </strong> ${data[2025].NOMINAL}<br><br>`;
 
+    const datos = data["2025"];
+    const clavesExcluidas = ["SECCION", "POBLACION", "NOMINAL", "TOTAL_VOTOS", "error"];
+
+    // Paso 1: Filtrar claves numéricas válidas
+    const camposOrdenados = Object.entries(datos)
+      .filter(([key, value]) => 
+        typeof value === "number" && !clavesExcluidas.includes(key)
+      )
+      .sort((a, b) => b[1] - a[1]); // Paso 2: Ordenar de mayor a menor
+    
+    // Paso 3: Construir el contenido ordenado
+    for (const [key, value] of camposOrdenados) {
       let extra = "";
-
-      // Si es un partido, muestra porcentaje sobre TOTAL_VOTOS
-      if (typeof value === "number" && data.TOTAL_VOTOS && key !== "TOTAL_VOTOS" && key !== "NOMINAL" ) {
-        extra = ` - ${(value / data.TOTAL_VOTOS * 100).toFixed(1)} %`;
+    
+      if (datos.TOTAL_VOTOS) {
+        extra = ` - ${(value / datos.TOTAL_VOTOS * 100).toFixed(1)} %`;
       }
-
-      // Si es TOTAL_VOTOS, muestra % sobre NOMINAL
-      if (key === "TOTAL_VOTOS" && data.NOMINAL) {
-        extra = ` - ${(value / data.NOMINAL * 100).toFixed(1)} %`;
-      }
-
-      if( key !== "SECCION" && key !== "POBLACION" && key !== "NOMINAL")
-      contenido += `<strong>${key}:</strong> ${value}${extra}<br>`;
+    
+      contenido_2025 += `<strong>${key}:</strong> ${value}${extra}<br>`;
     }
+    contenido_2025 +=  `<br><strong>VOTOS Totales : </strong> ${data[2025].TOTAL_VOTOS} == >>   ${(data[2025].TOTAL_VOTOS/data[2025].NOMINAL*100).toFixed(1)} %<br><br>`
+// 2021
+    let contenido_2021 = `<strong>Sección:</strong> ${seccion.id}<br><br>`;
+    const datos_2021 = data["2021"];
+
+    // Paso 1: Filtrar claves numéricas válidas
+    const camposOrdenados_2021 = Object.entries(datos_2021)
+      .filter(([key, value]) => 
+        typeof value === "number" && !clavesExcluidas.includes(key)
+      )
+      .sort((a, b) => b[1] - a[1]); // Paso 2: Ordenar de mayor a menor
+    
+    // Paso 3: Construir el contenido ordenado
+    for (const [key, value] of camposOrdenados_2021) {
+      let extra = "";
+    
+      if (datos.TOTAL_VOTOS) {
+        extra = ` - ${(value / datos.TOTAL_VOTOS * 100).toFixed(1)} %`;
+      }
+    
+      contenido_2021 += `<strong>${key}:</strong> ${value}${extra}<br>`;
+    }
+    contenido_2021 +=  `<br><strong>VOTOS Totales : </strong> ${data[2021].TOTAL_VOTOS} == >>   ${(data[2021].TOTAL_VOTOS/data[2021].NOMINAL*100).toFixed(1)} %<br><br>`
 
 
 
-    document.getElementById("details_2025").innerHTML = contenido;
+
+    document.getElementById("details_2025").innerHTML = contenido_2025;
+    document.getElementById("details_2021").innerHTML = contenido_2021;
   });
 
    });

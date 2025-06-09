@@ -2,13 +2,13 @@ import pandas as pd
 import sqlite3
 
 # Cargar el CSV
-df = pd.read_csv("Result_Catemaco_2025.csv")
+df = pd.read_csv("Result_Catemaco_2025_.csv")
 
 # Limpiar campos clave (por ejemplo, quitar comillas y espacios de SECCION)
 df["SECCION"] = df["SECCION"].astype(str).str.replace("'", "").str.strip()
 
 # Conectarse o crear la base de datos
-conn = sqlite3.connect("catemaco.db")
+conn = sqlite3.connect("catemaco_2025.db")
 cursor = conn.cursor()
 
 # Eliminar la tabla si ya existe
@@ -16,7 +16,7 @@ cursor.execute("DROP TABLE IF EXISTS casillas")
 
 # Crear tabla con campos específicos
 cursor.execute("""
-CREATE TABLE casillas (
+CREATE TABLE casillas_2025 (
 CLAVE_CASILLA TEXT, 
 CLAVE_ACTA TEXT, 
 ID_ENTIDAD TEXT, 
@@ -63,7 +63,7 @@ COTEJADA TEXT
 """)
 
 # Insertar los datos
-df.to_sql("casillas", conn, if_exists="append", index=False)
+df.to_sql("casillas_2025", conn, if_exists="append", index=False)
 
 # Cerrar conexión
 conn.commit()
