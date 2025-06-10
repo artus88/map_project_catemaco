@@ -1,5 +1,5 @@
  // Crear el mapa centrado en Catemaco
- const map = L.map('map').setView([18.419, -95.122], 14);
+ const map = L.map('map').setView([18.419, -95.122], 10.5);
 
  // Cargar tiles de OpenStreetMap
  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -11,9 +11,10 @@
  // Dibujar polígonos y agregar eventos
  secciones.forEach(seccion => {
    const poligono = L.polygon(seccion.coords.map(([lon, lat]) => [lat, lon]), { color: 'blue' }).addTo(map);
-
+   const estiloOriginal = { color: 'blue' };
    // Cuando el mouse pasa sobre el polígono
    poligono.on('mouseover', () => {
+    poligono.setStyle({ color: 'red' });
     fetch(`/2025/${seccion.id}`)
   .then(res => res.json())
   .then(data => {
@@ -52,6 +53,7 @@
     contenido_2025 +=  `<br><strong>VOTOS Totales : </strong> ${data[2025].TOTAL_VOTOS} == >>   ${(data[2025].TOTAL_VOTOS/data[2025].NOMINAL*100).toFixed(1)} %<br><br>`
 // 2021
     let contenido_2021 = `<strong>Sección:</strong> ${seccion.id}<br><br>`;
+    contenido_2021 +=  `<strong>VOTOS NOMINALES : </strong> ${data[2021].NOMINAL}<br><br>`;
     const datos_2021 = data["2021"];
 
     // Paso 1: Filtrar claves numéricas válidas
@@ -65,8 +67,8 @@
     for (const [key, value] of camposOrdenados_2021) {
       let extra = "";
     
-      if (datos.TOTAL_VOTOS) {
-        extra = ` - ${(value / datos.TOTAL_VOTOS * 100).toFixed(1)} %`;
+      if (datos_2021.TOTAL_VOTOS) {
+        extra = ` - ${(value / datos_2021.TOTAL_VOTOS * 100).toFixed(1)} %`;
       }
     
       contenido_2021 += `<strong>${key}:</strong> ${value}${extra}<br>`;
@@ -81,5 +83,9 @@
   });
 
    });
+   poligono.on('mouseout', () => {
+    // Restaurar color original
+    poligono.setStyle({ color: 'green' });
+  });
  });
 

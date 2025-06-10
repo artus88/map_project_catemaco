@@ -1,22 +1,62 @@
 
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
   <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Mapa Catemaco</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
   <style>
-    body { margin: 0; display: flex; }
-    #map { height: 100vh; width: 70vw; }
-    #info { width: 30vw; padding: 1em; background: #f8f8f8; font-family: sans-serif; }
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    #map {
+      flex: 1 1 60%;
+      height: 60vh;
+      width: 100%;
+    }
+
+    #info {
+      flex: 1 1 40%;
+      max-height: 40vh;
+      overflow-y: auto;
+      padding: 1em;
+      background: #f8f8f8;
+    }
+
+    @media (min-width: 768px) {
+      body {
+        flex-direction: row;
+      }
+
+      #map {
+        width: 70vw;
+        height: 100vh;
+      }
+
+      #info {
+        width: 30vw;
+        height: 100vh;
+        max-height: none;
+        overflow-y: auto;
+      }
+    }
   </style>
 </head>
 <body>
+
   <div id="map"></div>
+
   <div id="info">
-    <h2>Votos de la Eleccion 2025 </h2>
+    <h2>Votos de la Elección 2025</h2>
     <div id="details_2025">Pasa el cursor sobre un polígono.</div>
-    <h2>Votos de la Eleccion 2021 </h2>
+    <hr>
+    <h2>Votos de la Elección 2021</h2>
     <div id="details_2021">Pasa el cursor sobre un polígono.</div>
   </div>
 
@@ -26,3 +66,4 @@
 
 </body>
 </html>
+

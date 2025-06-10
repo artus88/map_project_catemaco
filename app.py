@@ -54,7 +54,6 @@ def get_section_info(section_id):
     votos_2025 = get_info_from_db(section_id,'2025')
     votos_2021 = get_info_from_db(section_id,'2021')
     data_2025 = jsonify({"2025" :votos_2025, "2021" :votos_2021})
-    #print (data)
     return data_2025
 
 if __name__ == "__main__":
