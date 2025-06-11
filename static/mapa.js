@@ -11,9 +11,33 @@ console.log("mun_id extraído:", mun_id);
    maxZoom: 19
  }).addTo(map);
 
- 
+  async function cargarSeccionesDesdeGeoJSON(mun_id) {
+  const secciones = [];
 
- // Dibujar polígonos y agregar eventos
+  const response = await fetch("/static/SECCION_V2.geojson"); // Ajusta si la ruta cambia
+  const geojson = await response.json();
+
+  geojson.features.forEach(feature => {
+    if (feature.properties.MUNICIPIO === parseInt(mun_id)) {
+      const seccionId = feature.properties.SECCION.toString();
+
+
+      const coords = feature.geometry.coordinates[0];
+
+      secciones.push({ id: seccionId, coords: coords });
+    }
+  });
+
+  return secciones;
+}
+
+
+console.log(secciones)
+cargarSeccionesDesdeGeoJSON(mun_id).then(secciones => {
+  console.log("Secciones cargadas:", secciones);
+  // Aquí puedes usar la lista para crear polígonos con Leaflet
+
+// Dibujar polígonos y agregar eventos
  secciones.forEach(seccion => {
    const poligono = L.polygon(seccion.coords.map(([lon, lat]) => [lat, lon]), { color: 'blue' }).addTo(map);
    const estiloOriginal = { color: 'blue' };
@@ -90,7 +114,11 @@ console.log("mun_id extraído:", mun_id);
    });
    poligono.on('mouseout', () => {
     // Restaurar color original
-    poligono.setStyle({ color: 'green' });
+    poligono.setStyle({ color: 'blue' });
   });
  });
+
+});
+
+ 
 

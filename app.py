@@ -7,7 +7,7 @@ from queries import Map_query_casillas_2025, Map_query_casillas_2021
 app = Flask(__name__, static_folder="static")
 CORS(app)
 
-DB_PATH = "catemaco_2025.db"
+DB_PATH = "Veracruz_2025.db"
 
 def get_info_from_db(section_id, year):
     if year == '2025':

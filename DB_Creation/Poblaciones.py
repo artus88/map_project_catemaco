@@ -8,7 +8,7 @@ df = pd.read_csv("Poblaciones.csv")
 df["SECCION"] = df["SECCION"].astype(str).str.replace("'", "").str.strip()
 
 # Conectarse o crear la base de datos
-conn = sqlite3.connect("catemaco_2025.db")
+conn = sqlite3.connect("Veracruz_2025.db")
 cursor = conn.cursor()
 
 # Eliminar la tabla si ya existe
@@ -32,4 +32,4 @@ df.to_sql("Poblaciones", conn, if_exists="append", index=False)
 conn.commit()
 conn.close()
 
-print("Base de datos creada con éxito: catemaco_2025.db")
+print("Base de datos creada con éxito: Veracruz_2025.db")
