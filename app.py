@@ -1,5 +1,5 @@
 
-from flask import Flask, jsonify, send_from_directory
+from flask import Flask, jsonify, send_from_directory, render_template
 from flask_cors import CORS
 import sqlite3
 from queries import Map_query_casillas_2025, Map_query_casillas_2021
@@ -43,17 +43,23 @@ SECTIONS = {
     "0647": {"columna2": "Centro", "columna3": "Zona urbana", "columna4": "Cerca del lago"}
 }
 
-@app.route("/map")
+@app.route("/")
 def index():
-    return send_from_directory("static", "map.html")
+    return send_from_directory("static", "index.html")
 
-@app.route("/2025/<section_id>")
-def get_section_info(section_id):
+@app.route("/map/<mun_id_01>")
+def map(mun_id_01):
+    print(mun_id_01)
+    return render_template( "map.html", mun_id = mun_id_01)
+
+@app.route("/map/<mun_id>/<section_id>")
+def get_section_info(mun_id,section_id):
     #data = SECTIONS.get(section_id, {"error": "No se encontró la sección"})
     #return jsonify(data)
     votos_2025 = get_info_from_db(section_id,'2025')
     votos_2021 = get_info_from_db(section_id,'2021')
     data_2025 = jsonify({"2025" :votos_2025, "2021" :votos_2021})
+    print (mun_id)
     return data_2025
 
 if __name__ == "__main__":

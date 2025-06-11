@@ -1,3 +1,8 @@
+ 
+ const pathParts = window.location.pathname.split('/');
+const mun_id = pathParts[pathParts.length - 1];
+console.log("mun_id extraído:", mun_id);
+
  // Crear el mapa centrado en Catemaco
  const map = L.map('map').setView([18.419, -95.122], 10.5);
 
@@ -15,7 +20,7 @@
    // Cuando el mouse pasa sobre el polígono
    poligono.on('mouseover', () => {
     poligono.setStyle({ color: 'red' });
-    fetch(`/2025/${seccion.id}`)
+    fetch(`/map/40/${seccion.id}`)
   .then(res => res.json())
   .then(data => {
     if (data.error) {
