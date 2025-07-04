@@ -6,6 +6,8 @@ df = pd.read_csv("Result_Veracruz_2021.csv")
 
 # Limpiar campos clave (por ejemplo, quitar comillas y espacios de SECCION)
 df["SECCION"] = df["SECCION"].astype(str).str.replace("'", "").str.strip()
+df["ID_MUNICIPIO"] = df["ID_MUNICIPIO"].astype(str).str.replace("'", "").str.strip()
+df["ID_CASILLA"] = df["ID_CASILLA"].astype(str).str.replace("'", "").str.strip()
 
 # Conectarse o crear la base de datos
 conn = sqlite3.connect("Veracruz_2025.db")
