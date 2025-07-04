@@ -2,12 +2,37 @@
 from flask import Flask, jsonify, send_from_directory, render_template
 from flask_cors import CORS
 import sqlite3
-from queries import Map_query_casillas_2025, Map_query_casillas_2021
+from queries import Map_query_casillas_2025, Map_query_casillas_2021, Totals
 
 app = Flask(__name__, static_folder="static")
 CORS(app)
 
 DB_PATH = "Veracruz_2025.db"
+
+def get_info_from_total_db(mun_id):
+
+    try:
+        conn = sqlite3.connect(DB_PATH)
+        conn.row_factory = sqlite3.Row
+        cursor = conn.cursor()
+
+        # Consultar por sección
+        cursor.execute(Totals, (mun_id,))
+        row = cursor.fetchone()
+        conn.close()
+            
+        if row:
+            # Convertir a diccionario
+            resultado = {key: row[key] for key in row.keys()}
+            print (resultado)
+            return resultado
+        
+        else:
+            return {"error": "Sección no encontrada"}
+
+    except Exception as e:
+        return {"error": str(e)}
+    
 
 def get_info_from_db(section_id, year):
     if year == '2025':
@@ -52,6 +77,11 @@ def map(mun_id_01):
     print(mun_id_01)
     return render_template( "map.html", mun_id = mun_id_01)
 
+@app.route("/statistics/<mun_id_01>")
+def statistic(mun_id_01):
+    print(mun_id_01)
+    return render_template( "statistics.html", mun_id = mun_id_01)
+
 @app.route("/map/<mun_id>/<section_id>")
 def get_section_info(mun_id,section_id):
     #data = SECTIONS.get(section_id, {"error": "No se encontró la sección"})
@@ -59,6 +89,15 @@ def get_section_info(mun_id,section_id):
     votos_2025 = get_info_from_db(section_id,'2025')
     votos_2021 = get_info_from_db(section_id,'2021')
     data_2025 = jsonify({"2025" :votos_2025, "2021" :votos_2021})
+    print (mun_id)
+    return data_2025
+
+@app.route("/statistic/<mun_id>")
+def get_mun_info(mun_id):
+    #data = SECTIONS.get(section_id, {"error": "No se encontró la sección"})
+    #return jsonify(data)
+    votos_2025 = get_info_from_total_db(mun_id)
+    data_2025 = jsonify({"2025" :votos_2025,})
     print (mun_id)
     return data_2025
 

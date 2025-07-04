@@ -1,5 +1,5 @@
  
- const pathParts = window.location.pathname.split('/');
+const pathParts = window.location.pathname.split('/');
 const mun_id = pathParts[pathParts.length - 1];
 console.log("mun_id extraído:", mun_id);
 
@@ -32,7 +32,7 @@ console.log("mun_id extraído:", mun_id);
 }
 
 
-console.log(secciones)
+
 cargarSeccionesDesdeGeoJSON(mun_id).then(secciones => {
   console.log("Secciones cargadas:", secciones);
   // Aquí puedes usar la lista para crear polígonos con Leaflet
@@ -44,7 +44,7 @@ cargarSeccionesDesdeGeoJSON(mun_id).then(secciones => {
    // Cuando el mouse pasa sobre el polígono
    poligono.on('mouseover', () => {
     poligono.setStyle({ color: 'red' });
-    fetch(`/map/40/${seccion.id}`)
+    fetch(`/map/${mun_id}/${seccion.id}`)
   .then(res => res.json())
   .then(data => {
     if (data.error) {
