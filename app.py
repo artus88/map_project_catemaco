@@ -82,10 +82,7 @@ def map(mun_id_01):
     print(mun_id_01)
     return render_template( "map.html", mun_id = mun_id_01)
 
-@app.route("/statistics/<mun_id_01>")
-def statistic(mun_id_01):
-    print(mun_id_01)
-    return render_template( "statistics.html", mun_id = mun_id_01)
+
 
 @app.route("/map/<mun_id>/<section_id>")
 def get_section_info(mun_id,section_id):
@@ -97,6 +94,13 @@ def get_section_info(mun_id,section_id):
     print (mun_id)
     return data_2025
 
+#Renderiza statistics.html
+@app.route("/statistics/<mun_id_01>")
+def statistic(mun_id_01):
+    print(mun_id_01)
+    return render_template( "statistics.html", mun_id = mun_id_01)
+
+#Backend de la API de datos de statistics.js
 @app.route("/statistic/<mun_id>")
 def get_mun_info(mun_id):
     votos_2025 = get_info_from_total_db(mun_id, '2025')

@@ -21,9 +21,9 @@ const createChart = (elementId, year, statsData) => {
     chartDom.innerHTML = `No hay datos disponibles para ${year}.`;
     return;
   }
-
+  console.log('')
   // Procesar los datos para el formato que necesita el gráfico
-  const excludedKeys = ['ID_MUNICIPIO', 'TOTAL_VOTOS', 'NOMINAL'];
+  const excludedKeys = ['MUNICIPIO','ID_MUNICIPIO', 'TOTAL_VOTOS', 'NOMINAL'];
   const chartData = Object.entries(statsData)
     .filter(([key, value]) => !excludedKeys.includes(key) && typeof value === 'number')
     .sort(([, a], [, b]) => b - a);
@@ -37,8 +37,8 @@ const createChart = (elementId, year, statsData) => {
   // Configurar las opciones del gráfico
   const option = {
     title: {
-      text: `Resultados Electorales ${year} - Municipio ${mun_id}`,
-      subtext: `Votos Totales: ${statsData.TOTAL_VOTOS || 'N/A'} | Nominal: ${statsData.NOMINAL || 'N/A'}`,
+      text: `Resultados Electorales ${year} - Municipio ${statsData.MUNICIPIO}`,
+      subtext: `Votos Totales: ${statsData.TOTAL_VOTOS || 'N/A'} | Nominal: ${statsData.NOMINAL || 'N/A'} | Participacion: ${(statsData.TOTAL_VOTOS/statsData.NOMINAL*100).toFixed(1) || 'N/A'}%`,
       left: 'center'
     },
     tooltip: {
