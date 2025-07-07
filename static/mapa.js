@@ -65,11 +65,13 @@ function dibujarSecciones(secciones) {
           if (data.error) {
             document.getElementById("details_2025").innerHTML = data.error;
             document.getElementById("details_2021").innerHTML = data.error;
+            document.getElementById("details_2017").innerHTML = data.error;
             return;
           }
           
           // Lógica para mostrar los detalles de 2025
           let contenido_2025 = `<strong>Sección:</strong> ${seccion.id}<br>`;
+          console.log(data)
           if (data["2025"]) {
             contenido_2025 += `<strong>POBLACIONES:</strong> ${data["2025"].POBLACION || 'N/A'}<br>`;
             contenido_2025 += `<strong>VOTOS NOMINALES:</strong> ${data["2025"].NOMINAL || 'N/A'}<br><br>`;
@@ -106,6 +108,25 @@ function dibujarSecciones(secciones) {
             contenido_2021 += 'No hay datos para 2021.';
           }
           document.getElementById("details_2021").innerHTML = contenido_2021;
+
+                    // Lógica para mostrar los detalles de 2017
+          let contenido_2017 = `<strong>Sección:</strong> ${seccion.id}<br>`;
+           if (data["2017"]) {
+            contenido_2017 += `<strong>VOTOS NOMINALES:</strong> ${data["2017"].NOMINAL || 'N/A'}<br><br>`;
+            const datos_2017 = data["2017"];
+            const clavesExcluidas = ["SECCION", "POBLACION", "NOMINAL", "TOTAL_VOTOS", "error"];
+            const camposOrdenados_2017 = Object.entries(datos_2017)
+              .filter(([key, value]) => typeof value === "number" && !clavesExcluidas.includes(key))
+              .sort((a, b) => b[1] - a[1]);
+            camposOrdenados_2017.forEach(([key, value]) => {
+              const porcentaje = datos_2017.TOTAL_VOTOS ? ` - ${(value / datos_2017.TOTAL_VOTOS * 100).toFixed(1)}%` : '';
+              contenido_2017 += `<strong>${key}:</strong> ${value}${porcentaje}<br>`;
+            });
+            contenido_2017 += `<br><strong>VOTOS TOTALES:</strong> ${datos_2017.TOTAL_VOTOS} (${(datos_2017.TOTAL_VOTOS / datos_2017.NOMINAL * 100).toFixed(1)}%)<br>`;
+          } else {
+            contenido_2017 += 'No hay datos para 2017.';
+          }
+          document.getElementById("details_2017").innerHTML = contenido_2017;
         });
     });
 

@@ -2,7 +2,7 @@
 from flask import Flask, jsonify, send_from_directory, render_template
 from flask_cors import CORS
 import sqlite3
-from queries import Map_query_casillas_2025, Map_query_casillas_2021, Totals_2025, Totals_2021
+from queries import Map_query_casillas_2025, Map_query_casillas_2021, Map_query_casillas_2017, Totals_2025, Totals_2021
 
 app = Flask(__name__, static_folder="static")
 CORS(app)
@@ -13,6 +13,8 @@ def get_info_from_total_db(mun_id, year):
     if year == '2025':
         Totals_query = Totals_2025
     elif year == '2021':
+        Totals_query = Totals_2021
+    elif year == '2017':
         Totals_query = Totals_2021
     else:
         return {"error": "Año no válido"}
@@ -45,6 +47,9 @@ def get_info_from_db(section_id, year):
     elif year =='2021': 
         
         Map_query = Map_query_casillas_2021
+    elif year =='2017': 
+        
+        Map_query = Map_query_casillas_2017
     try:
         conn = sqlite3.connect(DB_PATH)
         conn.row_factory = sqlite3.Row
@@ -90,7 +95,8 @@ def get_section_info(mun_id,section_id):
     #return jsonify(data)
     votos_2025 = get_info_from_db(section_id,'2025')
     votos_2021 = get_info_from_db(section_id,'2021')
-    data_2025 = jsonify({"2025" :votos_2025, "2021" :votos_2021})
+    votos_2017 = get_info_from_db(section_id,'2017')
+    data_2025 = jsonify({"2025" :votos_2025, "2021" :votos_2021, "2017":votos_2017})
     print (mun_id)
     return data_2025
 
