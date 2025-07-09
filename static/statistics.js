@@ -30,7 +30,7 @@ const createChart = (elementId, year, statsData) => {
 
   const categories = chartData.map(([key]) => key);
   const seriesData = chartData.map(([, value]) => value);
-
+  console.log(chartData)
   // Paleta de colores para las barras
   const colors = ['#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae', '#749f83', '#ca8622', '#bda29a', '#6e7074', '#546570', '#c4ccd3'];
 
@@ -64,6 +64,7 @@ const createChart = (elementId, year, statsData) => {
           color: colors[index % colors.length]
         }
       })),
+      coordinateSystem: 'cartesian2d',
       type: 'bar'
     }],
     grid: {
@@ -91,6 +92,7 @@ const initializeCharts = () => {
       if (data.error) {
         document.getElementById("details_2025").innerHTML = `Error: ${data.error}`;
         document.getElementById("details_2021").innerHTML = ""; // Limpiar el otro por si acaso
+        document.getElementById("details_2017").innerHTML = ""; // Limpiar el otro por si acaso
         return;
       }
 
@@ -99,12 +101,15 @@ const initializeCharts = () => {
       
       // Crear gráfico para 2021
       createChart('details_2021', '2021', data['2021']);
+
+      createChart('details_2017', '2017', data['2017']);
     })
     .catch(error => {
       console.error('Error en el fetch:', error);
       const errorMsg = "No se pudieron cargar los datos del gráfico. Revisa la consola para más detalles.";
       document.getElementById("details_2025").innerHTML = errorMsg;
       document.getElementById("details_2021").innerHTML = errorMsg;
+      document.getElementById("details_2017").innerHTML = errorMsg;
     });
 };
 
